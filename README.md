@@ -17,7 +17,7 @@ Frontend: HTML, CSS, JavaScript
 
 Backend: Node.js (Express)
 
-APIs Used: NASA API, Moon Phase API
+APIs Used: NASA POWEE API, Moon Phase API
 
 🎯 Purpose
 
