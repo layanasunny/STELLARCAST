@@ -2,7 +2,8 @@
  StellarCast is a simple yet powerful web-based application that combines real-time weather updates and moon phase calender .It helping users stay informed about both earthly weather and celestial rhythms.
 
 ⛓️**🌌STELLARCAST🚀**
-<img width="541" height="370" alt="Screenshot from 2025-10-05 09-20-40" src="https://github.com/user-attachments/assets/863c2cd2-83f1-4539-aa55-40866752dcd2" />
+
+<img width="520" height="340" alt="Screenshot from 2025-10-05 09-20-40" src="https://github.com/user-attachments/assets/863c2cd2-83f1-4539-aa55-40866752dcd2" />
 
 
 ⛓️**🪐 Overview**
