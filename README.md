@@ -10,7 +10,7 @@ Get accurate and up-to-date weather information including temperature, humidity,
 🌕 Moon Phase Calendar:
 View the current moon phase and explore lunar cycles through an interactive calendar.
 
-💡 Technologies Used
+**💡 Technologies Used**
 
 Frontend: HTML, CSS, JavaScript
 
@@ -18,9 +18,9 @@ Backend: Node.js (Express)
 
 APIs Used: NASA POWEE API, Moon Phase API
 
-🎯 Purpose
+**🎯 Purpose**
 
 StellarCast is designed to bring together environmental and astronomical data in a user-friendly interface — ideal for nature lovers, astronomers, and anyone curious about the world above and around us.
 
-Clone the repository:
+**Clone the repository:**
 git clone https://github.com/yourusername/stellarcast.git
