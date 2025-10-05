@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StellarCast Home</title>
+  <style>
+    /* === Base Styling === */
+    body {
+      margin: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      background: #0b0f29;
+      position: relative;
+    }
+
+    /* === Background Image === */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(5, 8, 20, 0.85), rgba(5, 8, 20, 0.9)),
+        url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: -3;
+    }
+
+    /* === Subtle Stars Overlay === */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
+      animation: moveStars 200s linear infinite;
+      z-index: -2;
+      opacity: 0.4;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 5000px; }
+    }
+
+    /* === Header === */
+    h1 {
+      font-size: 3.5rem;
+      color: #d8e2f0;
+      text-shadow: 0 0 15px #3bb8ec, 0 0 25px #112f46;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #aab6c5;
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+    }
+
+    /* === Buttons === */
+    .nav-buttons {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-buttons a {
+      background: rgba(255, 255, 255, 0.08);
+      color: #bfe9ff;
+      text-decoration: none;
+      padding: 15px 35px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 10px rgba(17, 174, 236, 0.2);
+    }
+
+    .nav-buttons a:hover {
+      color: #11aeec;
+      box-shadow: 0 0 20px #11aeec, 0 0 40px #0a2a3b;
+      transform: translateY(-3px);
+    }
+
+    /* === Footer === */
+    footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <h1>StellarCast</h1>
+  <p>Explore the skies — Track lunar cycles and weather in style.</p>
+
+  <div class="nav-buttons">
+    <a href="moon.html">🌙 Lunar View</a>
+    <a href="weather.html">☁ Weather</a>
+  </div>
+
+  <footer>© 2025 StellarCast | A Space & Weather Experience</footer>
+</body>
+</html>

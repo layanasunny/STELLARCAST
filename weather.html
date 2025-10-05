@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunar Weather - Celestial Forecasts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e2a 0%, #1a1a3a 50%, #2d1b69 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Galaxy Background with Stars */
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            animation: twinkle-small 8s infinite ease-in-out;
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            animation: twinkle-medium 6s infinite ease-in-out;
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+            animation: twinkle-large 10s infinite ease-in-out;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            border-radius: 50%;
+            animation: shooting 3s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes twinkle-small {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        @keyframes twinkle-medium {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        @keyframes twinkle-large {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.4); }
+        }
+
+        @keyframes shooting {
+            0% {
+                opacity: 0;
+                transform: translateX(0) translateY(0) rotate(45deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(500px) translateY(500px) rotate(45deg);
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #8a6df1;
+            text-shadow: 0 0 15px rgba(138, 109, 241, 0.7);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #a78bfa, #7e5bef, #6d28d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #c4b5fd;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box {
+            display: flex;
+            box-shadow: 0 0 25px rgba(138, 109, 241, 0.3);
+            border-radius: 50px;
+            overflow: hidden;
+            background: rgba(30, 30, 60, 0.6);
+            border: 1px solid rgba(138, 109, 241, 0.3);
+        }
+
+        #cityInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #cityInput::placeholder {
+            color: #a5b4fc;
+        }
+
+        #searchBtn {
+            padding: 15px 25px;
+            background: linear-gradient(90deg, #7e5bef, #6d28d9);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        #searchBtn:hover {
+            background: linear-gradient(90deg, #8a6df1, #7e5bef);
+            box-shadow: 0 0 15px rgba(138, 109, 241, 0.5);
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 40, 0.9);
+            border-radius: 15px;
+            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 109, 241, 0.3);
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(138, 109, 241, 0.2);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .spinner {
+            border: 5px solid rgba(138, 109, 241, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid #8a6df1;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .weather-card {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(138, 109, 241, 0.2);
+            margin-bottom: 30px;
+            display: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 109, 241, 0.2);
+        }
+
+        .location {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .city-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e2e8f0;
+        }
+
+        .country {
+            background: rgba(138, 109, 241, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            color: #c4b5fd;
+            border: 1px solid rgba(138, 109, 241, 0.3);
+        }
+
+        .current-weather {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .temperature {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #e2e8f0, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(165, 180, 252, 0.3);
+        }
+
+        .weather-icon {
+            font-size: 5rem;
+            color: #fbbf24;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+            filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+        }
+
+        .weather-description {
+            font-size: 1.5rem;
+            text-transform: capitalize;
+            margin-top: 10px;
+            color: #c4b5fd;
+            text-align: center;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: rgba(30, 30, 60, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(138, 109, 241, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(138, 109, 241, 0.2);
+        }
+
+        .detail-icon {
+            font-size: 2rem;
+            color: #8a6df1;
+            text-shadow: 0 0 10px rgba(138, 109, 241, 0.5);
+        }
+
+        .detail-info h3 {
+            font-size: 0.9rem;
+            color: #a5b4fc;
+            margin-bottom: 5px;
+        }
+
+        .detail-info p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e2e8f0;
+        }
+
+        .nasa-data {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(138, 109, 241, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 109, 241, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #8a6df1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .data-card {
+            background: rgba(30, 30, 60, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(138, 109, 241, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(138, 109, 241, 0.2);
+        }
+
+        .data-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #ffeb3b;
+        }
+
+        .data-label {
+            font-size: 0.9rem;
+            color: #b3e5fc;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #a5b4fc;
+            font-size: 0.9rem;
+            padding: 20px;
+            border-top: 1px solid rgba(138, 109, 241, 0.2);
+            width: 100%;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #a5d6a7;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .current-weather {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .weather-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Galaxy Background -->
+    <div class="galaxy-bg" id="galaxyBg"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>Lunar Weather</h1>
+            </div>
+            <p class="tagline">Celestial forecasts for earthly conditions</p>
+        </header>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="cityInput" placeholder="Search for cities, districts, or states...">
+                <button id="searchBtn">Search <i class="fas fa-search"></i></button>
+            </div>
+            <div class="suggestions" id="suggestions"></div>
+        </div>
+
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Scanning atmospheric data...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Location not found. Please try another search.
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Weather data loaded successfully!
+        </div>
+
+        <div class="weather-card" id="weatherCard">
+            <div class="location">
+                <h2 class="city-name" id="cityName">New York</h2>
+                <span class="country" id="country">US</span>
+            </div>
+
+            <div class="current-weather">
+                <div>
+                    <div class="temperature" id="temperature">24°C</div>
+                    <div class="weather-description" id="weatherDescription">Clear Sky</div>
+                </div>
+                <div class="weather-icon">
+                    <i class="fas fa-sun" id="weatherIcon"></i>
+                </div>
+            </div>
+
+            <div class="weather-details">
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="detail-info">
+                        <h3>HUMIDITY</h3>
+                        <p id="humidity">65%</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="detail-info">
+                        <h3>WIND SPEED</h3>
+                        <p id="windSpeed">5.2 m/s</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <div class="detail-info">
+                        <h3>FEELS LIKE</h3>
+                        <p id="feelsLike">26°C</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                    </div>
+                    <div class="detail-info">
+                        <h3>PRESSURE</h3>
+                        <p id="pressure">1015 hPa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nasa-data">
+            <h2 class="section-title"><i class="fas fa-satellite"></i> NASA Environmental Data</h2>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-label">AIR QUALITY INDEX</div>
+                    <div class="data-value" id="airQuality">42</div>
+                    <div class="data-label">Good</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">UV INDEX</div>
+                    <div class="data-value" id="uvIndex">5.2</div>
+                    <div class="data-label">Moderate</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">VISIBILITY</div>
+                    <div class="data-value" id="visibility">10 km</div>
+                    <div class="data-label">Clear</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">SUNLIGHT INTENSITY</div>
+                    <div class="data-value" id="sunIntensity">78%</div>
+                    <div class="data-label">High</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>NASA Hackathon Project | Lunar Weather | Available locations weather data</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create enhanced galaxy background with stars and shooting stars
+        function createGalaxyBackground() {
+            const galaxyBg = document.getElementById('galaxyBg');
+            
+            // Create regular stars
+            const starCount = 200;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                
+                // Random star size
+                const sizes = ['small', 'medium', 'large'];
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                star.classList.add('star', size);
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 10}s`;
+                
+                galaxyBg.appendChild(star);
+            }
+            
+            // Create shooting stars
+            function createShootingStar() {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                // Random starting position
+                shootingStar.style.left = `${Math.random() * 20}%`;
+                shootingStar.style.top = `${Math.random() * 20}%`;
+                
+                // Random animation delay
+                shootingStar.style.animationDelay = `${Math.random() * 15}s`;
+                
+                galaxyBg.appendChild(shootingStar);
+                
+                // Remove shooting star after animation completes
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, 3000);
+            }
+            
+            // Create shooting stars periodically
+            setInterval(createShootingStar, 2000);
+            
+            // Create initial shooting stars
+            for (let i = 0; i < 3; i++) {
+                setTimeout(createShootingStar, i * 500);
+            }
+        }
+
+        // Available locations with their weather data
+        const availableLocations = {
+            // Kerala Districts
+            'thiruvananthapuram': { city: 'Thiruvananthapuram', country: 'IN', temp: 32, description: 'Partly Cloudy', icon: 'fa-cloud-sun', humidity: 78, windSpeed: 2.5, feelsLike: 36, pressure: 1008, airQuality: 45, uvIndex: 8.2, visibility: 8, sunIntensity: 75 },
+            'kollam': { city: 'Kollam', country: 'IN', temp: 31, description: 'Light Rain', icon: 'fa-cloud-rain', humidity: 82, windSpeed: 3.1, feelsLike: 35, pressure: 1009, airQuality: 38, uvIndex: 7.8, visibility: 7, sunIntensity: 65 },
+            'pathanamthitta': { city: 'Pathanamthitta', country: 'IN', temp: 29, description: 'Cloudy', icon: 'fa-cloud', humidity: 85, windSpeed: 2.2, feelsLike: 33, pressure: 1010, airQuality: 32, uvIndex: 6.5, visibility: 6, sunIntensity: 55 },
+            'alappuzha': { city: 'Alappuzha', country: 'IN', temp: 30, description: 'Humid', icon: 'fa-smog', humidity: 88, windSpeed: 2.8, feelsLike: 35, pressure: 1007, airQuality: 42, uvIndex: 7.2, visibility: 9, sunIntensity: 68 },
+            'kottayam': { city: 'Kottayam', country: 'IN', temp: 31, description: 'Partly Cloudy', icon: 'fa-cloud-sun', humidity: 80, windSpeed: 2.4, feelsLike: 35, pressure: 1009, airQuality: 36, uvIndex: 7.9, visibility: 8, sunIntensity: 72 },
+            'idukki': { city: 'Idukki', country: 'IN', temp: 26, description: 'Misty', icon: 'fa-smog', humidity: 92, windSpeed: 1.8, feelsLike: 28, pressure: 1012, airQuality: 28, uvIndex: 5.8, visibility: 4, sunIntensity: 45 },
+            'ernakulam': { city: 'Ernakulam', country: 'IN', temp: 33, description: 'Sunny', icon: 'fa-sun', humidity: 75, windSpeed: 3.5, feelsLike: 37, pressure: 1006, airQuality: 52, uvIndex: 8.8, visibility: 10, sunIntensity: 82 },
+            'thrissur': { city: 'Thrissur', country: 'IN', temp: 32, description: 'Partly Cloudy', icon: 'fa-cloud-sun', humidity: 78, windSpeed: 3.2, feelsLike: 36, pressure: 1008, airQuality: 44, uvIndex: 8.1, visibility: 9, sunIntensity: 76 },
+            'palakkad': { city: 'Palakkad', country: 'IN', temp: 34, description: 'Hot', icon: 'fa-sun', humidity: 68, windSpeed: 3.8, feelsLike: 38, pressure: 1005, airQuality: 58, uvIndex: 9.2, visibility: 12, sunIntensity: 88 },
+            'malappuram': { city: 'Malappuram', country: 'IN', temp: 33, description: 'Sunny', icon: 'fa-sun', humidity: 72, windSpeed: 3.4, feelsLike: 37, pressure: 1007, airQuality: 49, uvIndex: 8.7, visibility: 11, sunIntensity: 84 },
+            'kozhikode': { city: 'Kozhikode', country: 'IN', temp: 31, description: 'Humid', icon: 'fa-smog', humidity: 84, windSpeed: 3.0, feelsLike: 35, pressure: 1008, airQuality: 41, uvIndex: 7.5, visibility: 8, sunIntensity: 70 },
+            'wayanad': { city: 'Wayanad', country: 'IN', temp: 25, description: 'Cool', icon: 'fa-cloud', humidity: 90, windSpeed: 2.0, feelsLike: 27, pressure: 1013, airQuality: 26, uvIndex: 5.2, visibility: 5, sunIntensity: 42 },
+            'kannur': { city: 'Kannur', country: 'IN', temp: 32, description: 'Partly Cloudy', icon: 'fa-cloud-sun', humidity: 79, windSpeed: 3.3, feelsLike: 36, pressure: 1007, airQuality: 47, uvIndex: 8.4, visibility: 10, sunIntensity: 79 },
+            'kasaragod': { city: 'Kasaragod', country: 'IN', temp: 33, description: 'Sunny', icon: 'fa-sun', humidity: 76, windSpeed: 3.6, feelsLike: 37, pressure: 1006, airQuality: 51, uvIndex: 8.9, visibility: 11, sunIntensity: 85 },
+
+            // Indian States
+            'kerala': { city: 'Kerala', country: 'IN', temp: 31, description: 'Tropical', icon: 'fa-cloud-sun', humidity: 80, windSpeed: 3.0, feelsLike: 35, pressure: 1008, airQuality: 42, uvIndex: 7.8, visibility: 8, sunIntensity: 72 },
+            'tamil nadu': { city: 'Tamil Nadu', country: 'IN', temp: 35, description: 'Hot', icon: 'fa-sun', humidity: 65, windSpeed: 4.2, feelsLike: 39, pressure: 1005, airQuality: 68, uvIndex: 9.5, visibility: 12, sunIntensity: 90 },
+            'karnataka': { city: 'Karnataka', country: 'IN', temp: 33, description: 'Warm', icon: 'fa-sun', humidity: 70, windSpeed: 3.8, feelsLike: 37, pressure: 1006, airQuality: 55, uvIndex: 8.7, visibility: 11, sunIntensity: 82 },
+            'maharashtra': { city: 'Maharashtra', country: 'IN', temp: 34, description: 'Hot', icon: 'fa-sun', humidity: 62, windSpeed: 4.5, feelsLike: 38, pressure: 1004, airQuality: 72, uvIndex: 9.8, visibility: 13, sunIntensity: 92 },
+            'delhi': { city: 'Delhi', country: 'IN', temp: 38, description: 'Smoggy', icon: 'fa-smog', humidity: 45, windSpeed: 2.8, feelsLike: 41, pressure: 1002, airQuality: 156, uvIndex: 8.9, visibility: 3, sunIntensity: 78 },
+            'mumbai': { city: 'Mumbai', country: 'IN', temp: 32, description: 'Humid', icon: 'fa-smog', humidity: 85, windSpeed: 3.2, feelsLike: 38, pressure: 1008, airQuality: 120, uvIndex: 7.5, visibility: 5, sunIntensity: 65 },
+
+            // American States
+            'california': { city: 'California', country: 'US', temp: 28, description: 'Sunny', icon: 'fa-sun', humidity: 45, windSpeed: 5.2, feelsLike: 29, pressure: 1015, airQuality: 35, uvIndex: 8.2, visibility: 15, sunIntensity: 88 },
+            'texas': { city: 'Texas', country: 'US', temp: 32, description: 'Hot', icon: 'fa-sun', humidity: 55, windSpeed: 4.8, feelsLike: 35, pressure: 1012, airQuality: 42, uvIndex: 9.1, visibility: 12, sunIntensity: 92 },
+            'florida': { city: 'Florida', country: 'US', temp: 30, description: 'Humid', icon: 'fa-cloud-sun', humidity: 75, windSpeed: 3.5, feelsLike: 35, pressure: 1013, airQuality: 38, uvIndex: 7.8, visibility: 10, sunIntensity: 80 },
+            'new york': { city: 'New York', country: 'US', temp: 24, description: 'Clear Sky', icon: 'fa-sun', humidity: 65, windSpeed: 5.2, feelsLike: 26, pressure: 1015, airQuality: 42, uvIndex: 5.2, visibility: 10, sunIntensity: 78 },
+            'washington': { city: 'Washington', country: 'US', temp: 18, description: 'Rainy', icon: 'fa-cloud-rain', humidity: 80, windSpeed: 4.2, feelsLike: 16, pressure: 1008, airQuality: 25, uvIndex: 3.1, visibility: 6, sunIntensity: 35 },
+
+            // Major International Cities
+            'london': { city: 'London', country: 'UK', temp: 18, description: 'Partly Cloudy', icon: 'fa-cloud-sun', humidity: 72, windSpeed: 3.8, feelsLike: 17, pressure: 1008, airQuality: 28, uvIndex: 3.1, visibility: 8, sunIntensity: 45 },
+            'tokyo': { city: 'Tokyo', country: 'JP', temp: 28, description: 'Light Rain', icon: 'fa-cloud-rain', humidity: 80, windSpeed: 2.5, feelsLike: 30, pressure: 1012, airQuality: 55, uvIndex: 6.8, visibility: 6, sunIntensity: 35 },
+            'paris': { city: 'Paris', country: 'FR', temp: 20, description: 'Cloudy', icon: 'fa-cloud', humidity: 68, windSpeed: 3.2, feelsLike: 19, pressure: 1013, airQuality: 35, uvIndex: 4.1, visibility: 9, sunIntensity: 52 },
+            'sydney': { city: 'Sydney', country: 'AU', temp: 22, description: 'Sunny', icon: 'fa-sun', humidity: 60, windSpeed: 4.2, feelsLike: 23, pressure: 1018, airQuality: 20, uvIndex: 8.5, visibility: 12, sunIntensity: 85 },
+            'dubai': { city: 'Dubai', country: 'AE', temp: 35, description: 'Sunny', icon: 'fa-sun', humidity: 45, windSpeed: 2.1, feelsLike: 37, pressure: 1009, airQuality: 65, uvIndex: 9.8, visibility: 15, sunIntensity: 95 },
+            'toronto': { city: 'Toronto', country: 'CA', temp: 20, description: 'Cloudy', icon: 'fa-cloud', humidity: 65, windSpeed: 4.5, feelsLike: 18, pressure: 1014, airQuality: 25, uvIndex: 4.5, visibility: 11, sunIntensity: 48 }
+        };
+
+        // Function to get weather icon
+        function getWeatherIcon(icon) {
+            return icon;
+        }
+
+        // Function to get air quality status
+        function getAirQualityStatus(aqi) {
+            if (aqi <= 50) return { level: 'Good', color: '#4caf50' };
+            if (aqi <= 100) return { level: 'Moderate', color: '#ff9800' };
+            if (aqi <= 150) return { level: 'Unhealthy for Sensitive Groups', color: '#ff5722' };
+            if (aqi <= 200) return { level: 'Unhealthy', color: '#f44336' };
+            if (aqi <= 300) return { level: 'Very Unhealthy', color: '#9c27b0' };
+            return { level: 'Hazardous', color: '#795548' };
+        }
+
+        // Function to get UV index status
+        function getUVIndexStatus(uv) {
+            if (uv <= 2) return { level: 'Low', color: '#4caf50' };
+            if (uv <= 5) return { level: 'Moderate', color: '#ffeb3b' };
+            if (uv <= 7) return { level: 'High', color: '#ff9800' };
+            if (uv <= 10) return { level: 'Very High', color: '#f44336' };
+            return { level: 'Extreme', color: '#9c27b0' };
+        }
+
+        // Function to display weather data
+        function displayWeatherData(data) {
+            document.getElementById('cityName').textContent = data.city;
+            document.getElementById('country').textContent = data.country;
+            document.getElementById('temperature').textContent = `${data.temp}°C`;
+            document.getElementById('weatherDescription').textContent = data.description;
+            document.getElementById('weatherIcon').className = `fas ${data.icon}`;
+            document.getElementById('humidity').textContent = `${data.humidity}%`;
+            document.getElementById('windSpeed').textContent = `${data.windSpeed} m/s`;
+            document.getElementById('feelsLike').textContent = `${data.feelsLike}°C`;
+            document.getElementById('pressure').textContent = `${data.pressure} hPa`;
+            
+            // NASA Data Section
+            document.getElementById('airQuality').textContent = data.airQuality;
+            document.getElementById('uvIndex').textContent = data.uvIndex;
+            document.getElementById('visibility').textContent = `${data.visibility} km`;
+            document.getElementById('sunIntensity').textContent = `${data.sunIntensity}%`;
+            
+            // Update status labels with colors
+            const airQualityStatus = getAirQualityStatus(data.airQuality);
+            document.getElementById('airQuality').nextElementSibling.textContent = airQualityStatus.level;
+            document.getElementById('airQuality').nextElementSibling.style.color = airQualityStatus.color;
+            
+            const uvStatus = getUVIndexStatus(parseFloat(data.uvIndex));
+            document.getElementById('uvIndex').nextElementSibling.textContent = uvStatus.level;
+            document.getElementById('uvIndex').nextElementSibling.style.color = uvStatus.color;
+            
+            weatherCard.style.display = 'block';
+        }
+
+        // Function to show suggestions
+        function showSuggestions(query) {
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            
+            if (query.length < 2) {
+                suggestions.style.display = 'none';
+                return;
+            }
+            
+            const filteredLocations = Object.keys(availableLocations)
+                .filter(key => {
+                    const location = availableLocations[key];
+                    return location.city.toLowerCase().includes(query.toLowerCase()) || 
+                           key.toLowerCase().includes(query.toLowerCase());
+                })
+                .slice(0, 8); // Limit to 8 suggestions
+            
+            if (filteredLocations.length > 0) {
+                filteredLocations.forEach(key => {
+                    const location = availableLocations[key];
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.textContent = `${location.city}, ${location.country}`;
+                    suggestionItem.addEventListener('click', () => {
+                        document.getElementById('cityInput').value = location.city;
+                        suggestions.style.display = 'none';
+                        searchWeather(location.city);
+                    });
+                    suggestions.appendChild(suggestionItem);
+                });
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        }
+
+        // Function to search weather
+        function searchWeather(query) {
+            const normalizedQuery = query.toLowerCase().trim();
+            const loading = document.querySelector('.loading');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const weatherCard = document.getElementById('weatherCard');
+            
+            loading.style.display = 'block';
+            weatherCard.style.display = 'none';
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                loading.style.display = 'none';
+                
+                // Try exact match first
+                if (availableLocations[normalizedQuery]) {
+                    displayWeatherData(availableLocations[normalizedQuery]);
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 2000);
+                    return;
+                }
+                
+                // Try partial match
+                const matchedKey = Object.keys(availableLocations).find(key => 
+                    availableLocations[key].city.toLowerCase().includes(normalizedQuery) ||
+                    key.toLowerCase().includes(normalizedQuery)
+                );
+                
+                if (matchedKey) {
+                    displayWeatherData(availableLocations[matchedKey]);
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 2000);
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityInput = document.getElementById('cityInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const suggestions = document.getElementById('suggestions');
+            
+            // Create enhanced galaxy background
+            createGalaxyBackground();
+            
+            // Event listener for search input
+            cityInput.addEventListener('input', function() {
+                showSuggestions(this.value);
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!cityInput.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.style.display = 'none';
+                }
+            });
+            
+            // Event listener for search button
+            searchBtn.addEventListener('click', function() {
+                const city = cityInput.value;
+                if (city.trim() === '') return;
+                searchWeather(city);
+            });
+
+            // Event listener for Enter key
+            cityInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+
+            // Display default city on load
+            displayWeatherData(availableLocations['new york']);
+        });
+    </script>
+    <a href="frontpage.html"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 9L12 2L21 9"></path>
+  <path d="M9 22V12H15V22"></path>
+  <path d="M21 22H3"></path>
+</svg>
+</a>
+</body>
+</html>

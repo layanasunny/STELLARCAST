@@ -1,0 +1,1345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Dawn Moon Phase Calendar</title>
+    
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+
+        :root {
+            --cosmic-dawn: #1a0b2e;
+            --deep-space: #0c0720;
+            --nebula-purple: #3d2352;
+            --starlight: #ffd166;
+            --moon-glow: #f7f7f2;
+            --cosmic-pink: #ef476f;
+            --galaxy-teal: #118ab2;
+            --asteroid: #ff9e00;
+            --space-dust: #9d4edd;
+            --void: #10002b;
+            --dawn-orange: #ff6b6b;
+            --twilight-blue: #4cc9f0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--deep-space), var(--cosmic-dawn), var(--nebula-purple));
+            color: var(--moon-glow);
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background stars */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--starlight), transparent),
+                radial-gradient(2px 2px at 40px 70px, var(--dawn-orange), transparent),
+                radial-gradient(1px 1px at 90px 40px, var(--space-dust), transparent),
+                radial-gradient(1px 1px at 130px 80px, var(--twilight-blue), transparent),
+                radial-gradient(2px 2px at 160px 30px, var(--starlight), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 8s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Cosmic Header */
+        .cosmic-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, 
+                rgba(58, 35, 82, 0.8), 
+                rgba(26, 11, 46, 0.6));
+            border-radius: 20px;
+            border: 1px solid var(--starlight);
+            box-shadow: 0 0 30px rgba(255, 209, 102, 0.3),
+                        inset 0 0 30px rgba(255, 209, 102, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, var(--starlight) 70%);
+            opacity: 0.1;
+            animation: cosmic-drift 20s linear infinite;
+        }
+
+        @keyframes cosmic-drift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cosmic-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+        }
+
+        .cosmic-orb {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, var(--starlight), var(--dawn-orange));
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 30px var(--starlight),
+                        inset 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: orbit 6s ease-in-out infinite;
+        }
+
+        .cosmic-orb::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 20%;
+            height: 20%;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        @keyframes orbit {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .cosmic-header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--starlight), var(--dawn-orange), var(--twilight-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 209, 102, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .mission-statement {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+            color: var(--space-dust);
+            margin-top: 10px;
+        }
+
+        /* Calendar Container */
+        .calendar-container {
+            background: linear-gradient(135deg, 
+                rgba(58, 35, 82, 0.8), 
+                rgba(26, 11, 46, 0.6));
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid var(--space-dust);
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.2),
+                        inset 0 0 30px rgba(255, 209, 102, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .month-year {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--starlight);
+            text-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--cosmic-pink), var(--space-dust));
+            border: none;
+            color: var(--moon-glow);
+            font-size: 1.1rem;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(239, 71, 111, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 71, 111, 0.4);
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--asteroid);
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+        }
+
+        .calendar-day {
+            background: linear-gradient(135deg, 
+                rgba(61, 35, 82, 0.4), 
+                rgba(26, 11, 46, 0.6));
+            border-radius: 15px;
+            padding: 20px 8px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calendar-day::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 209, 102, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .calendar-day:hover::before {
+            left: 100%;
+        }
+
+        .calendar-day:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 209, 102, 0.2), 
+                rgba(157, 78, 221, 0.3));
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--starlight);
+            box-shadow: 0 10px 25px rgba(255, 209, 102, 0.3);
+        }
+
+        .day-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--moon-glow);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Enhanced Moon Icons with Aesthetic Shapes */
+        .moon-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #3a3a6a, #2a2a4a);
+            position: relative;
+            overflow: hidden;
+            margin: 12px 0;
+            box-shadow: 
+                inset -5px -5px 10px rgba(0, 0, 0, 0.6),
+                inset 5px 5px 10px rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(255, 209, 102, 0.3);
+            animation: cosmic-float 8s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .calendar-day:hover .moon-icon {
+            animation: moon-hover-pulse 1.5s ease-in-out infinite;
+            box-shadow: 
+                inset -5px -5px 10px rgba(0, 0, 0, 0.6),
+                inset 5px 5px 10px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(255, 209, 102, 0.6);
+        }
+
+        @keyframes cosmic-float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+            }
+            33% { 
+                transform: translateY(-8px) rotate(2deg) scale(1.02);
+            }
+            66% { 
+                transform: translateY(4px) rotate(-1deg) scale(0.98);
+            }
+        }
+
+        @keyframes moon-hover-pulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                box-shadow: 0 0 30px rgba(255, 209, 102, 0.6);
+            }
+            50% { 
+                transform: scale(1.1) rotate(5deg);
+                box-shadow: 0 0 40px rgba(255, 209, 102, 0.8);
+            }
+        }
+
+        /* New Moon - Completely dark with subtle glow */
+        .moon-new {
+            background: radial-gradient(circle at 30% 30%, #2a2a4a, #1a1a2a);
+            box-shadow: 
+                inset -5px -5px 10px rgba(0, 0, 0, 0.8),
+                inset 5px 5px 10px rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(255, 209, 102, 0.2);
+        }
+
+        .moon-new .moon-fill {
+            display: none;
+        }
+
+        /* Waxing Crescent - Elegant thin crescent */
+        .moon-waxing-crescent .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(60% 0%, 100% 0%, 100% 100%, 60% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* First Quarter - Clean half moon */
+        .moon-first-quarter .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Waxing Gibbous - Elegant gibbous shape */
+        .moon-waxing-gibbous .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 30% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Full Moon - Brilliant full moon with glow */
+        .moon-full {
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            box-shadow: 
+                inset -5px -5px 10px rgba(0, 0, 0, 0.4),
+                inset 5px 5px 10px rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(255, 255, 200, 0.7);
+        }
+
+        .moon-full .moon-fill {
+            display: none;
+        }
+
+        /* Waning Gibbous - Elegant gibbous shape */
+        .moon-waning-gibbous .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(0% 0%, 70% 0%, 70% 100%, 0% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Last Quarter - Clean half moon */
+        .moon-last-quarter .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Waning Crescent - Elegant thin crescent */
+        .moon-waning-crescent .moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            clip-path: polygon(0% 0%, 40% 0%, 40% 100%, 0% 100%);
+            box-shadow: 
+                inset -4px -4px 8px rgba(0, 0, 0, 0.4),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced Crater Details */
+        .moon-icon::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(200, 200, 220, 0.5), transparent);
+            border-radius: 50%;
+            top: 20%;
+            left: 25%;
+            box-shadow: 
+                20px 15px 0 4px rgba(200, 200, 220, 0.4),
+                10px 35px 0 5px rgba(200, 200, 220, 0.45),
+                35px 35px 0 4px rgba(200, 200, 220, 0.5),
+                25px 55px 0 3px rgba(200, 200, 220, 0.4);
+            z-index: 2;
+        }
+
+        .moon-phase-name {
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 8px;
+            opacity: 0.9;
+            font-weight: 500;
+            color: var(--starlight);
+            position: relative;
+            z-index: 2;
+        }
+
+        .other-month {
+            opacity: 0.4;
+            background: linear-gradient(135deg, 
+                rgba(61, 35, 82, 0.2), 
+                rgba(26, 11, 46, 0.3));
+        }
+
+        .today {
+            background: linear-gradient(135deg, 
+                rgba(255, 209, 102, 0.3), 
+                rgba(157, 78, 221, 0.4));
+            border: 2px solid var(--asteroid);
+            box-shadow: 0 0 20px rgba(255, 158, 0, 0.4);
+        }
+
+        /* Current Info Section */
+        .current-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, 
+                rgba(58, 35, 82, 0.7), 
+                rgba(26, 11, 46, 0.5));
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--space-dust);
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            color: var(--asteroid);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 300;
+            border-bottom: 2px solid var(--space-dust);
+            padding-bottom: 10px;
+        }
+
+        .today-moon-display {
+            text-align: center;
+        }
+
+        .today-moon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .location-data {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--starlight);
+        }
+
+        /* Enhanced Moon Details Modal with Advanced Animations */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 7, 32, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            animation: modal-appear 0.5s ease-out;
+        }
+
+        @keyframes modal-appear {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, 
+                rgba(58, 35, 82, 0.95), 
+                rgba(26, 11, 46, 0.9));
+            margin: 2% auto;
+            padding: 40px;
+            border-radius: 25px;
+            border: 2px solid var(--starlight);
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 209, 102, 0.3);
+            animation: modal-slide-up 0.6s ease-out;
+        }
+
+        @keyframes modal-slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: var(--starlight);
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            color: var(--asteroid);
+            transform: rotate(90deg) scale(1.1);
+            background: rgba(255, 158, 0, 0.2);
+        }
+
+        /* Enhanced Large Moon with Multiple Animation Options */
+        .large-moon {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #3a3a6a, #2a2a4a);
+            margin: 0 auto 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset -10px -10px 20px rgba(0, 0, 0, 0.6),
+                inset 10px 10px 20px rgba(255, 255, 255, 0.1),
+                0 0 60px rgba(255, 209, 102, 0.4);
+            animation: cosmic-float-enhanced 10s ease-in-out infinite;
+        }
+
+        @keyframes cosmic-float-enhanced {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+            }
+            25% { 
+                transform: translateY(-15px) rotate(2deg) scale(1.02);
+            }
+            50% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+            }
+            75% { 
+                transform: translateY(10px) rotate(-2deg) scale(0.98);
+            }
+        }
+
+        .large-moon-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f8f8ff, #e8e8ff, #d8d8ff);
+            transition: all 1s ease;
+            box-shadow: 
+                inset -8px -8px 16px rgba(0, 0, 0, 0.5),
+                inset 8px 8px 16px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Moon Rotation Animations */
+        .moon-rotate-slow {
+            animation: moon-rotate-slow 20s linear infinite !important;
+        }
+
+        .moon-orbit {
+            animation: moon-orbit 15s linear infinite !important;
+        }
+
+        .moon-pulse-rotate {
+            animation: moon-pulse-rotate 8s ease-in-out infinite !important;
+        }
+
+        @keyframes moon-rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes moon-orbit {
+            0% { 
+                transform: rotate(0deg) translateY(0px);
+            }
+            25% { 
+                transform: rotate(90deg) translateY(-10px);
+            }
+            50% { 
+                transform: rotate(180deg) translateY(0px);
+            }
+            75% { 
+                transform: rotate(270deg) translateY(10px);
+            }
+            100% { 
+                transform: rotate(360deg) translateY(0px);
+            }
+        }
+
+        @keyframes moon-pulse-rotate {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+            }
+            25% { 
+                transform: rotate(90deg) scale(1.05);
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+            }
+            75% { 
+                transform: rotate(270deg) scale(1.05);
+            }
+        }
+
+        .moon-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .detail-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 209, 102, 0.1), 
+                rgba(157, 78, 221, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--space-dust);
+            transition: transform 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, 
+                rgba(255, 209, 102, 0.2), 
+                rgba(157, 78, 221, 0.2));
+        }
+
+        .detail-card h4 {
+            color: var(--asteroid);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Animation Control Buttons */
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .anim-btn {
+            padding: 10px 15px;
+            background: linear-gradient(135deg, var(--space-dust), var(--cosmic-pink));
+            border: none;
+            border-radius: 8px;
+            color: var(--moon-glow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 10px rgba(157, 78, 221, 0.3);
+        }
+
+        .anim-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.5);
+        }
+
+        .anim-btn.active {
+            background: linear-gradient(135deg, var(--asteroid), var(--starlight));
+            color: var(--deep-space);
+            box-shadow: 0 0 15px var(--asteroid);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .calendar-day {
+                min-height: 130px;
+                padding: 15px 5px;
+            }
+            
+            .moon-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .current-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .cosmic-logo {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .cosmic-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .large-moon {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .month-year {
+                font-size: 1.8rem;
+            }
+            
+            .animation-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .anim-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 7, 32, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .cosmic-loader {
+            text-align: center;
+        }
+
+        .orbital-ring {
+            width: 120px;
+            height: 120px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--starlight);
+            border-right: 3px solid var(--space-dust);
+            border-radius: 50%;
+            position: relative;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .orbital-ring::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--asteroid);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--starlight);
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <header class="cosmic-header">
+            <div class="cosmic-logo">
+                <div class="cosmic-orb"></div>
+                <h1>Cosmic Dawn Moon Tracker</h1>
+            </div>
+            <p class="mission-statement">Journey through lunar cycles in cosmic harmony</p>
+        </header>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-btn" id="prev-month">◀ Previous</button>
+                <div class="month-year" id="current-month">Month Year</div>
+                <button class="nav-btn" id="next-month">Next ▶</button>
+            </div>
+            
+            <div class="weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Calendar days will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="current-info">
+            <div class="info-card">
+                <h3>🌙 Today's Lunar Phase</h3>
+                <div id="today-moon" class="today-moon-display"></div>
+            </div>
+            <div class="info-card">
+                <h3>🌌 Celestial Information</h3>
+                <div id="celestial-data" class="location-data"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Moon Details Modal -->
+    <div id="moon-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-content">
+                <!-- Moon details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="cosmic-loader">
+            <div class="orbital-ring"></div>
+            <div class="loading-text">Connecting to cosmic database...</div>
+        </div>
+    </div>
+
+    <script>
+        class CosmicMoonCalendar {
+            constructor() {
+                this.currentDate = new Date();
+                this.currentYear = this.currentDate.getFullYear();
+                this.currentMonth = this.currentDate.getMonth();
+                this.currentModalMoon = null;
+                this.currentAnimation = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.generateCalendar(this.currentYear, this.currentMonth);
+            }
+
+            setupEventListeners() {
+                document.getElementById('prev-month').addEventListener('click', () => {
+                    this.navigateMonth(-1);
+                });
+
+                document.getElementById('next-month').addEventListener('click', () => {
+                    this.navigateMonth(1);
+                });
+
+                document.querySelector('.close-modal').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                document.getElementById('moon-modal').addEventListener('click', (e) => {
+                    if (e.target.id === 'moon-modal') {
+                        this.closeModal();
+                    }
+                });
+            }
+
+            navigateMonth(direction) {
+                this.currentMonth += direction;
+                if (this.currentMonth < 0) {
+                    this.currentMonth = 11;
+                    this.currentYear--;
+                } else if (this.currentMonth > 11) {
+                    this.currentMonth = 0;
+                    this.currentYear++;
+                }
+                this.generateCalendar(this.currentYear, this.currentMonth);
+            }
+
+            generateCalendar(year, month) {
+                const calendarGrid = document.getElementById('calendar-grid');
+                calendarGrid.innerHTML = '';
+                
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+                
+                document.getElementById('current-month').textContent = 
+                    `${monthNames[month]} ${year}`;
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const prevMonthLastDay = new Date(year, month, 0).getDate();
+                
+                for (let i = firstDay - 1; i >= 0; i--) {
+                    const prevDate = new Date(year, month - 1, prevMonthLastDay - i);
+                    this.createCalendarDay(prevMonthLastDay - i, true, prevDate);
+                }
+                
+                const today = new Date();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const date = new Date(year, month, i);
+                    const isToday = today.getDate() === i && 
+                                   today.getMonth() === month && 
+                                   today.getFullYear() === year;
+                    
+                    this.createCalendarDay(i, false, date, isToday);
+                }
+                
+                const totalCells = 42;
+                const remainingCells = totalCells - (firstDay + daysInMonth);
+                for (let i = 1; i <= remainingCells; i++) {
+                    const nextDate = new Date(year, month + 1, i);
+                    this.createCalendarDay(i, true, nextDate);
+                }
+
+                this.updateTodayInfo();
+            }
+
+            createCalendarDay(dayNumber, isOtherMonth, date, isToday = false) {
+                const calendarGrid = document.getElementById('calendar-grid');
+                const day = document.createElement('div');
+                
+                day.className = 'calendar-day';
+                if (isOtherMonth) day.classList.add('other-month');
+                if (isToday) day.classList.add('today');
+                
+                const phaseInfo = this.calculateMoonPhase(date);
+                
+                day.innerHTML = `
+                    <div class="day-number">${dayNumber}</div>
+                    <div class="moon-icon ${this.getMoonPhaseClass(phaseInfo.phase)}">
+                        <div class="moon-fill"></div>
+                    </div>
+                    <div class="moon-phase-name">${phaseInfo.name}</div>
+                `;
+                
+                if (!isOtherMonth) {
+                    day.addEventListener('click', () => {
+                        this.showMoonDetails(date, phaseInfo);
+                    });
+                }
+                
+                calendarGrid.appendChild(day);
+            }
+
+            getMoonPhaseClass(phase) {
+                if (phase < 0.03 || phase >= 0.97) {
+                    return "moon-new";
+                } else if (phase < 0.22) {
+                    return "moon-waxing-crescent";
+                } else if (phase < 0.28) {
+                    return "moon-first-quarter";
+                } else if (phase < 0.47) {
+                    return "moon-waxing-gibbous";
+                } else if (phase < 0.53) {
+                    return "moon-full";
+                } else if (phase < 0.72) {
+                    return "moon-waning-gibbous";
+                } else if (phase < 0.78) {
+                    return "moon-last-quarter";
+                } else {
+                    return "moon-waning-crescent";
+                }
+            }
+
+            calculateMoonPhase(date) {
+                const knownNewMoon = new Date(2000, 0, 6).getTime();
+                const daysSince = (date.getTime() - knownNewMoon) / (1000 * 60 * 60 * 24);
+                const phase = (daysSince / 29.530588853) % 1;
+                
+                return this.getPhaseInfo(phase);
+            }
+
+            getPhaseInfo(phase) {
+                let phaseName, illumination, rotation, description, distance, constellation, age;
+                
+                if (phase < 0.03 || phase >= 0.97) {
+                    phaseName = "New Moon";
+                    illumination = 0;
+                    rotation = 0;
+                    description = "The moon is between Earth and Sun, not visible from Earth.";
+                } else if (phase < 0.22) {
+                    phaseName = "Waxing Crescent";
+                    illumination = phase / 0.22;
+                    rotation = (phase / 0.22) * 180;
+                    description = "A thin crescent is visible, growing larger each night.";
+                } else if (phase < 0.28) {
+                    phaseName = "First Quarter";
+                    illumination = 0.5;
+                    rotation = 180;
+                    description = "Half of the moon is illuminated - visible afternoon/evening.";
+                } else if (phase < 0.47) {
+                    phaseName = "Waxing Gibbous";
+                    illumination = 0.5 + (phase - 0.28) / 0.38;
+                    rotation = 180 + ((phase - 0.28) / 0.38) * 180;
+                    description = "More than half illuminated, growing toward full moon.";
+                } else if (phase < 0.53) {
+                    phaseName = "Full Moon";
+                    illumination = 1;
+                    rotation = 360;
+                    description = "The entire face is illuminated by the Sun - fully visible.";
+                } else if (phase < 0.72) {
+                    phaseName = "Waning Gibbous";
+                    illumination = 1 - (phase - 0.53) / 0.38;
+                    rotation = 360 - ((phase - 0.53) / 0.38) * 180;
+                    description = "Still mostly illuminated but decreasing each night.";
+                } else if (phase < 0.78) {
+                    phaseName = "Last Quarter";
+                    illumination = 0.5;
+                    rotation = 180;
+                    description = "Half illuminated - visible from midnight to morning.";
+                } else {
+                    phaseName = "Waning Crescent";
+                    illumination = (1 - phase) / 0.22;
+                    rotation = 180 - ((1 - phase) / 0.22) * 180;
+                    description = "Only a thin crescent remains, shrinking toward new moon.";
+                }
+
+                distance = Math.round(384400 + Math.sin(phase * Math.PI * 2) * 25000);
+                constellation = this.getConstellation(phase);
+                age = Math.round(phase * 29.53);
+
+                return {
+                    name: phaseName,
+                    illumination: illumination,
+                    rotation: rotation,
+                    description: description,
+                    distance: distance,
+                    constellation: constellation,
+                    age: age,
+                    phase: phase
+                };
+            }
+
+            getConstellation(phase) {
+                const constellations = [
+                    "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo",
+                    "Virgo", "Libra", "Scorpius", "Sagittarius", "Capricornus", "Aquarius"
+                ];
+                return constellations[Math.floor(phase * 12) % 12];
+            }
+
+            showMoonDetails(date, phaseInfo) {
+                const modal = document.getElementById('moon-modal');
+                const modalContent = document.getElementById('modal-content');
+                
+                const position = this.calculateMoonPosition(date);
+                
+                modalContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="color: var(--starlight); font-size: 2.5rem; margin-bottom: 10px;">🌕 Lunar Analysis</h2>
+                        <p style="color: var(--space-dust); font-size: 1.2rem;">${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; align-items: center;">
+                        <div style="text-align: center;">
+                            <div class="large-moon ${this.getMoonPhaseClass(phaseInfo.phase)}">
+                                <div class="large-moon-fill" id="modal-moon-fill"></div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button onclick="cosmicMoon.setMoonAnimation('moon-rotate-slow')" class="anim-btn" id="btn-slow">🌀 Slow Spin</button>
+                                <button onclick="cosmicMoon.setMoonAnimation('moon-orbit')" class="anim-btn" id="btn-orbit">🪐 Orbit Motion</button>
+                                <button onclick="cosmicMoon.setMoonAnimation('moon-pulse-rotate')" class="anim-btn" id="btn-pulse">💫 Pulse & Spin</button>
+                                <button onclick="cosmicMoon.resetMoonAnimation()" class="anim-btn" id="btn-reset">⏹️ Reset</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="color: var(--asteroid); margin-bottom: 20px; font-size: 2rem; border-bottom: 2px solid var(--space-dust); padding-bottom: 10px;">${phaseInfo.name}</h3>
+                            <p style="color: var(--starlight); line-height: 1.6; font-size: 1.1rem; margin-bottom: 25px;">${phaseInfo.description}</p>
+                            
+                            <div class="moon-details-grid">
+                                <div class="detail-card">
+                                    <h4>🌕 Illumination</h4>
+                                    <div style="font-size: 1.3rem; color: var(--starlight);">${Math.round(phaseInfo.illumination * 100)}%</div>
+                                    <div style="background: var(--deep-space); height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
+                                        <div style="background: linear-gradient(90deg, var(--starlight), var(--asteroid)); height: 100%; width: ${phaseInfo.illumination * 100}%;"></div>
+                                    </div>
+                                </div>
+                                <div class="detail-card">
+                                    <h4>🛰️ Distance</h4>
+                                    <div style="font-size: 1.3rem; color: var(--starlight);">${phaseInfo.distance.toLocaleString()} km</div>
+                                </div>
+                                <div class="detail-card">
+                                    <h4>📅 Age</h4>
+                                    <div style="font-size: 1.3rem; color: var(--starlight);">${phaseInfo.age} days</div>
+                                </div>
+                                <div class="detail-card">
+                                    <h4>✨ Constellation</h4>
+                                    <div style="font-size: 1.3rem; color: var(--starlight);">${phaseInfo.constellation}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--asteroid); margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid var(--space-dust); padding-bottom: 10px;">🌌 Celestial Position</h3>
+                        <div class="moon-details-grid">
+                            <div class="detail-card">
+                                <h4>📐 Altitude</h4>
+                                <div style="font-size: 1.3rem; color: var(--starlight);">${position.altitude}°</div>
+                            </div>
+                            <div class="detail-card">
+                                <h4>🧭 Azimuth</h4>
+                                <div style="font-size: 1.3rem; color: var(--starlight);">${position.azimuth}°</div>
+                            </div>
+                            <div class="detail-card">
+                                <h4>⏱️ Right Ascension</h4>
+                                <div style="font-size: 1.3rem; color: var(--starlight);">${position.rightAscension}</div>
+                            </div>
+                            <div class="detail-card">
+                                <h4>📏 Declination</h4>
+                                <div style="font-size: 1.3rem; color: var(--starlight);">${position.declination}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, rgba(255, 209, 102, 0.1), rgba(157, 78, 221, 0.1)); border-radius: 15px; padding: 25px; border: 1px solid var(--space-dust);">
+                        <h4 style="color: var(--asteroid); margin-bottom: 15px; text-align: center;">Lunar Cycle Progress</h4>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span style="color: var(--starlight);">New Moon</span>
+                            <span style="color: var(--starlight);">Full Moon</span>
+                        </div>
+                        <div style="background: var(--deep-space); height: 12px; border-radius: 6px; margin: 10px 0; overflow: hidden; position: relative;">
+                            <div style="background: linear-gradient(90deg, var(--cosmic-pink), var(--starlight), var(--asteroid)); height: 100%; width: ${(phaseInfo.phase * 100)}%; transition: width 1s ease;"></div>
+                            <div style="position: absolute; top: -5px; left: ${(phaseInfo.phase * 100)}%; width: 3px; height: 22px; background: var(--moon-glow); border-radius: 2px;"></div>
+                        </div>
+                        <div style="text-align: center; color: var(--space-dust); margin-top: 10px;">
+                            Day ${phaseInfo.age} of 29.5 • ${Math.round(phaseInfo.phase * 100)}% complete
+                        </div>
+                    </div>
+                `;
+                
+                modal.style.display = 'block';
+                this.currentModalMoon = document.querySelector('.large-moon');
+                this.currentAnimation = null;
+                
+                // Set default animation
+                this.setMoonAnimation('moon-rotate-slow');
+                this.setActiveButton('btn-slow');
+            }
+
+            setMoonAnimation(animationClass) {
+                if (!this.currentModalMoon) return;
+                
+                // Remove all animation classes
+                this.currentModalMoon.classList.remove(
+                    'moon-rotate-slow',
+                    'moon-orbit',
+                    'moon-pulse-rotate'
+                );
+                
+                // Add the new animation class
+                this.currentModalMoon.classList.add(animationClass);
+                this.currentAnimation = animationClass;
+                
+                // Update active button
+                this.setActiveButton(`btn-${animationClass.split('-').pop()}`);
+            }
+
+            setActiveButton(buttonId) {
+                // Remove active class from all buttons
+                document.querySelectorAll('.anim-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to current button
+                const activeBtn = document.getElementById(buttonId);
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                }
+            }
+
+            resetMoonAnimation() {
+                if (!this.currentModalMoon) return;
+                
+                // Remove all animation classes
+                this.currentModalMoon.classList.remove(
+                    'moon-rotate-slow',
+                    'moon-orbit',
+                    'moon-pulse-rotate'
+                );
+                
+                this.currentAnimation = null;
+                this.setActiveButton('btn-reset');
+            }
+
+            calculateMoonPosition(date) {
+                const hour = date.getHours();
+                const phase = (date.getTime() - new Date(2000, 0, 6).getTime()) / (1000 * 60 * 60 * 24) / 29.530588853 % 1;
+                
+                const altitude = 30 + Math.sin(hour * Math.PI / 12) * 60;
+                const azimuth = (hour * 15 + 180) % 360;
+                const rightAscension = (phase * 24).toFixed(2) + "h";
+                const declination = ((phase * 180 - 90) >= 0 ? '+' : '') + (phase * 180 - 90).toFixed(1) + "°";
+                
+                return {
+                    altitude: Math.round(altitude),
+                    azimuth: Math.round(azimuth),
+                    rightAscension: rightAscension,
+                    declination: declination
+                };
+            }
+
+            closeModal() {
+                document.getElementById('moon-modal').style.display = 'none';
+                if (this.currentModalMoon) {
+                    this.resetMoonAnimation();
+                }
+            }
+
+            updateTodayInfo() {
+                const today = new Date();
+                const phaseInfo = this.calculateMoonPhase(today);
+                const position = this.calculateMoonPosition(today);
+                
+                const todayMoon = document.getElementById('today-moon');
+                todayMoon.innerHTML = `
+                    <div class="moon-icon today-moon ${this.getMoonPhaseClass(phaseInfo.phase)}" style="width: 100px; height: 100px;">
+                        <div class="moon-fill"></div>
+                    </div>
+                    <div class="moon-details" style="margin-top: 15px;">
+                        <strong style="color: var(--asteroid); font-size: 1.2rem;">${phaseInfo.name}</strong><br>
+                        <span style="color: var(--starlight);">${Math.round(phaseInfo.illumination * 100)}% illuminated</span><br>
+                        <span style="color: var(--space-dust);">Age: ${phaseInfo.age} days</span>
+                    </div>
+                `;
+                
+                const celestialData = document.getElementById('celestial-data');
+                celestialData.innerHTML = `
+                    <strong style="color: var(--asteroid);">🌌 Current Moon Position:</strong><br>
+                    <span style="color: var(--starlight);">Altitude: ${position.altitude}°</span><br>
+                    <span style="color: var(--starlight);">Azimuth: ${position.azimuth}°</span><br>
+                    <span style="color: var(--starlight);">Constellation: ${phaseInfo.constellation}</span><br>
+                    <span style="color: var(--starlight);">Distance: ${phaseInfo.distance.toLocaleString()} km</span>
+                `;
+            }
+
+            showLoading() {
+                document.getElementById('loading').style.display = 'flex';
+            }
+
+            hideLoading() {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Initialize the cosmic moon calendar
+        const cosmicMoon = new CosmicMoonCalendar();
+    </script>
+    <a href="frontpage.html"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 9L12 2L21 9"></path>
+  <path d="M9 22V12H15V22"></path>
+  <path d="M21 22H3"></path>
+</svg>
+</a>
+</body>
+</html>
