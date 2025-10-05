@@ -23,4 +23,4 @@ APIs Used: NASA POWEE API, Moon Phase API
 StellarCast is designed to bring together environmental and astronomical data in a user-friendly interface — ideal for nature lovers, astronomers, and anyone curious about the world above and around us.
 
 **Clone the repository:**
-git clone https://github.com/yourusername/stellarcast.git
+ https://github.com/yourusername/stellarcast.git
