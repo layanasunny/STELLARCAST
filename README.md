@@ -20,7 +20,7 @@ With HTML, CSS, and JavaScript powering the frontend. StellarCast delivers a smo
 
 ## ⛓️**🚀 Features**
 
-###**🌦️ Weather App**
+### **🌦️ Weather App**
 
 ➕Get real-time weather updates for any city or region.
 
@@ -33,7 +33,7 @@ With HTML, CSS, and JavaScript powering the frontend. StellarCast delivers a smo
 ---
 
 
-###**🌕 Moon Phase Calendar**
+### **🌕 Moon Phase Calendar**
 
 ➕View the current moon phase and illumination percentage.
 
